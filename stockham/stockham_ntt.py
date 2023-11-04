@@ -91,12 +91,12 @@ def isclose(a, b, rel_tol=1e-09, abs_tol=0.0):
 
 def test_ntt_intt():
 	global w,wInv
-	print "Test ntt_intt"
+	print("Test ntt_intt")
 
 	powers2 = [pow(2,i) for i in range(1,19)]
 
 	for N in powers2:
-		print N
+		print(N)
 		
 		k = (P-1)/N
 		assert (P-1)%N == 0
@@ -110,7 +110,7 @@ def test_ntt_intt():
 		for j in range(N):
 			wInv.append(pow(w[j],P-2,P))
 
-		a = [randint(0,2**32) for _ in xrange(N)]
+		a = [randint(0,2**32) for _ in range(N)]
 
 		my_ntt_a = CPU_NTT(a)
 		ntt_intt_a = CPU_INTT(my_ntt_a)
@@ -120,16 +120,16 @@ def test_ntt_intt():
 			v2 = ntt_intt_a[i]/N
 			# print v,v2
 			assert v == v2
-	print "We are good"	
+	print("We are good")	
 
 def test_ntt_mul():
 	global w,wInv
-	print "test_ntt_mul"
+	print("test_ntt_mul")
 
 	powers2 = [pow(2,i) for i in range(1,19)]
 
 	for N in powers2:
-		print N
+		print(N)
 		
 		k = (P-1)/(2*N)
 		assert (P-1)%(2*N) == 0
@@ -143,8 +143,8 @@ def test_ntt_mul():
 		for j in range(2*N):
 			wInv.append(pow(w[j],P-2,P))
 
-		a = [randint(0,2**16) for _ in xrange(N)]+[0]*N
-		b = [randint(0,2**16) for _ in xrange(N)]+[0]*N
+		a = [randint(0,2**16) for _ in range(N)]+[0]*N
+		b = [randint(0,2**16) for _ in range(N)]+[0]*N
 
 		polynomial_a = Polynomial()	
 		polynomial_a.coef = a
@@ -163,11 +163,11 @@ def test_ntt_mul():
 		for i,v in enumerate(polynomial_c.coef):
 			v2 = ntt_intt_c[i]/(2*N)
 			assert v == v2
-	print "We are good"	
+	print("We are good")	
 
 def test_big_integers():
 	global w,wInv
-	print "Test ntt_intt"
+	print("Test ntt_intt")
 
 	powers2 = [pow(2,i) for i in range(1,19)]
 	N = 1024
@@ -185,18 +185,18 @@ def test_big_integers():
 		for j in range(N):
 			wInv.append(pow(w[j],P-2,P))
 
-		a = [randint(2**(size-1),2**size) for _ in xrange(N)]
+		a = [randint(2**(size-1),2**size) for _ in range(N)]
 
 		my_ntt_a = CPU_NTT(a)
 		ntt_intt_a = CPU_INTT(my_ntt_a)
 
 		assert len(ntt_intt_a) == len(a)
 		if [x/N for x in ntt_intt_a] == a:
-			print "Works for %d bits" % size
+			print("Works for %d bits" % size)
 		else:
-			print "Doesn't works for %d bits" % size
+			print("Doesn't works for %d bits" % size)
 
-	print "We are good"	
+	print("We are good")	
 
 def main():
 	test_ntt_intt()

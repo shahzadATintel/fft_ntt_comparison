@@ -8,7 +8,7 @@ invMod = lambda y,q:pow(y,q-2,q)
 #################################################################
 
 def generate_primitive_root(n,q):
-    for i in xrange(q):
+    for i in range(q):
         if Prime.is_prime(i):
             s = set()
             for j in range(q):
@@ -21,7 +21,7 @@ def generate_primitive_root(n,q):
 def bitrev_shuffle(x):
     N = len(x)
     j = 0
-    for i in xrange(1, N):
+    for i in range(1, N):
         b = N >> 1
         while j >= b:
             j -= b
@@ -39,8 +39,8 @@ def ntt_in_place(x,wN,q):
         wb = 1
         wb_step = wN**(N/trans_size)
 
-        for t in xrange(trans_size >> 1):
-            for trans in xrange(N / trans_size):
+        for t in range(trans_size >> 1):
+            for trans in range(N / trans_size):
                 i = trans * trans_size + t
                 j = i + (trans_size >> 1)
                 a = x[i] % q
@@ -72,8 +72,8 @@ def intt_in_place(x,wN,q):
         # wb_step = exp(2j * pi / trans_size)
         wb_step = invMod(wN**(N/trans_size) % q,q)
 
-        for t in xrange(trans_size >> 1):
-            for trans in xrange(N / trans_size):
+        for t in range(trans_size >> 1):
+            for trans in range(N / trans_size):
                 i = trans * trans_size + t
                 j = i + (trans_size >> 1)
                 a = x[i]

@@ -6,7 +6,7 @@ import sys
 sys.path.append("../")
 import generate_prime as Prime
 
-print "Comparison between recursive NTT and FFT algorithm "
+print("Comparison between recursive NTT and FFT algorithm ")
 
 def isclose(a, b, rel_tol=1e-09, abs_tol=0.0):
     return abs(a-b) <= max(rel_tol * max(abs(a), abs(b)), abs_tol)
@@ -23,20 +23,20 @@ equal = lambda a,b: isclose(a[0],b[0],abs_tol=0.0001) and isclose(a[1],b[1],abs_
 # Test the transform
 for i in range(2,9):
 	N = 2**i
-	A = range(N)
+	A = list(range(N))
 	q = get_a_proper_prime(N)
 
-	print "Testing for N == %d) NTT: %s" % (
+	print("Testing for N == %d) NTT: %s" % (
 		N,
-		A == intt(ntt(A,q),q))
+		A == intt(ntt(A,q),q)))
 
 try:
 	from numpy import convolve
 	from numpy import poly1d
 except Exception as e:
-	print "An error occured."
-	print "We need numpy to validate the polynomial multiplication. Please check if it is installed."
-	print e
+	print("An error occured.")
+	print("We need numpy to validate the polynomial multiplication. Please check if it is installed.")
+	print(e)
 
 # Test the polynomial multiplication:
 for i in range(2,9):
@@ -44,8 +44,8 @@ for i in range(2,9):
 	# q = 2**64-2**32+1
 	q = get_a_proper_prime(N)
 
-	A = range(N/2) + [0]*(N/2)
-	B = [1]*(N/2) + [0]*(N/2)
+	A = list(range(N//2)) + [0]*(N//2)
+	B = [1]*(N//2) + [0]*(N//2)
 
 	A_ntt = ntt(A, q)
 	B_ntt = ntt(B, q)
@@ -56,6 +56,6 @@ for i in range(2,9):
 
 	# We use convolve() to execute the polynomial multiplication through NumPy
 	# and poly1d() to compare both objects
-	print "Testing multiplication for N == %d) %s" % (
+	print("Testing multiplication for N == %d) %s" % (
 		N,
-		poly1d(intt(C_ntt, q)[::-1]) == poly1d(convolve(A, B)[::-1] % q))
+		poly1d(intt(C_ntt, q)[::-1]) == poly1d(convolve(A, B)[::-1] % q)))

@@ -95,13 +95,13 @@ def isclose(a, b, rel_tol=1e-09, abs_tol=0.0):
     return abs(a-b) <= max(rel_tol * max(abs(a), abs(b)), abs_tol)
 
 def test_fft_numpy():
-	print "Test fft_numpy"
+	print("Test fft_numpy")
 	powers2 = [pow(2,i) for i in range(1,19)]
 	equal = lambda a,b: isclose(a[0],b.real,abs_tol=0.0001) and isclose(a[1],b.imag,abs_tol=0.0001)
 
 	for N in powers2:
-		print N
-		a = [randint(0,2**16) for _ in xrange(N)]
+		print(N)
+		a = [randint(0,2**16) for _ in range(N)]
 
 		my_fft_a = CPU_FFT(a)
 		np_fft_a = list(np.fft.fft(a))
@@ -113,16 +113,16 @@ def test_fft_numpy():
 							np_fft_a[i]
 						)
 					)
-	print "We are good"
+	print("We are good")
 
 def test_fft_ifft():
-	print "Test fft_ifft"
+	print("Test fft_ifft")
 	powers2 = [pow(2,i) for i in range(1,19)]
 	equal = lambda a,b: isclose(a[0],b.real,abs_tol=MAX_ERROR) and isclose(a[1],b.imag,abs_tol=0.0001)
 
 	for N in powers2:
-		print N
-		a = [randint(0,2**16) for _ in xrange(N)]
+		print(N)
+		a = [randint(0,2**16) for _ in range(N)]
 
 		my_fft_a = CPU_FFT(a)
 		fft_ifft_a = CPU_IFFT(my_fft_a)
@@ -130,18 +130,18 @@ def test_fft_ifft():
 		assert len(fft_ifft_a) == len(a)
 		for i,v in enumerate(a):
 			assert( isclose(v,fft_ifft_a[i][0]/N,abs_tol=MAX_ERROR))
-	print "We are good"	
+	print("We are good")	
 
 def test_fft_mul():
-	print "test_fft_mul"
+	print("test_fft_mul")
 	powers2 = [pow(2,i) for i in range(1,19)]
 	equal = lambda a,b: isclose(a[0],b.real,abs_tol=MAX_ERROR) and isclose(a[1],b.imag,abs_tol=0.0001)
 
 	for N in powers2:
-		print N
+		print(N)
 
-		a = [randint(0,2**16) for _ in xrange(N)]+[0]*N
-		b = [randint(0,2**16) for _ in xrange(N)]+[0]*N
+		a = [randint(0,2**16) for _ in range(N)]+[0]*N
+		b = [randint(0,2**16) for _ in range(N)]+[0]*N
 
 		polynomial_a = Polynomial()	
 		polynomial_a.coef = a
@@ -161,7 +161,7 @@ def test_fft_mul():
 			v2 = fft_ifft_c[i][0]/(2*N)
 			# print v,v2
 			assert isclose(v,v2)
-	print "We are good"	
+	print("We are good")	
 
 def main():
 	test_fft_ifft()

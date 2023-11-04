@@ -42,16 +42,16 @@ class Polynomial():
     aftermult = False
 
     def __init__(self,*arg,**kargs):
-        if not kargs.has_key("coef"):
+        if "coef" not in kargs:
             self.coef = list(arg)
         else:
             self.coef = list(kargs["coef"])
 
-        if kargs.has_key("irr_poly"):
+        if "irr_poly" in kargs:
             assert isinstance(kargs["irr_poly"],Polynomial) or kargs["irr_poly"] is None
             self.irr_poly = kargs["irr_poly"]
 
-        if kargs.has_key("mod") and type(kargs["mod"]) in (int,long):
+        if "mod" in kargs and type(kargs["mod"]) in (int,int):
             # Coeff mod
             self.mod = kargs["mod"]
             self.coef = [c % self.mod for c in self.coef]
@@ -140,7 +140,7 @@ class Polynomial():
         return Polynomial(coef=[near(x) for x in self.coef],irr_poly=self.irr_poly)
 
     def set_dth_cyclotomic(self,d):
-       	assert type(d) in (int,long)
+       	assert type(d) in (int,int)
 	assert is_power2(d)
 	self.set_coeff(0, 1)
 	self.set_coeff(d/2, 1)
@@ -165,7 +165,7 @@ class Polynomial():
     def map(self,q):
         # []_q: reduction modulo q into the interval (-q/2,q/2]
         #return Polynomial(coef=[long(x % q) for x in self.coef],irr_poly=self.irr_poly,mod=self.mod).coeffmod()
-        return Polynomial(coef=[long(x % q)-q/2 for x in self.coef],irr_poly=self.irr_poly,mod=self.mod).coeffmod()
+        return Polynomial(coef=[int(x % q)-q/2 for x in self.coef],irr_poly=self.irr_poly,mod=self.mod).coeffmod()
         #return self % Polynomial(q)
 
     def is_zero(self):
@@ -176,7 +176,7 @@ class Polynomial():
 
     def from_JSON(self,j):
         self.coef = j["coef"]
-        if j.has_key("irr_poly"):
+        if "irr_poly" in j:
             self.irr_poly = j["irr_poly"]
         return self
 
@@ -230,7 +230,7 @@ class Polynomial():
 
             for i,a in enumerate(s):
                 for j,b in enumerate(o):
-                    c[i+j] += long(a*b)
+                    c[i+j] += int(a*b)
 
             C = Polynomial(coef=c,irr_poly=self.irr_poly,mod=self.mod).coeffmod()
 
@@ -238,7 +238,7 @@ class Polynomial():
             #     C = C % self.irr_poly
             return C
 
-        elif type(other) in (int, float,long):
+        elif type(other) in (int, float,int):
             # Do another thing
             return Polynomial(coef=[coef*other for coef in self.coef],irr_poly=self.irr_poly,mod=self.mod).coeffmod()
         else:
@@ -267,20 +267,20 @@ class Polynomial():
 
     def __div__(self, b):
         # self / b
-        if type(b) in (int,long,float):
+        if type(b) in (int,int,float):
             return Polynomial(coef = [x / b for x in self.coef])
         else:
             return (self // b)[0]
 
     def __rdiv__(self,b):
         # b / self
-        if type(b) in (int,long,float):
+        if type(b) in (int,int,float):
             return (Polynomial(coef=[b],mod=self.mod) // self)[0]
         else:
             return (b // self)[0]
 
     def __mod__(self, b):
-        if type(b) in (int,long,float):
+        if type(b) in (int,int,float):
             copy = self.copy()
             copy.coef = [x % b for x in copy]
             return copy
@@ -296,12 +296,12 @@ class Polynomial():
     def __floordiv__(self,other):
         dividend = self.copy()# Copy
 
-        if type(other) in (int,long,float):
+        if type(other) in (int,int,float):
             divisor = self.copy()
             divisor.coef = [other]
         else:
             divisor = other.copy()# Copy
-        div = long(divisor.coef[-1])
+        div = int(divisor.coef[-1])
 
         if len(dividend) >= len(divisor):
             pass
@@ -352,15 +352,15 @@ class Polynomial():
             a = self.coef
             b = x.coef
 
-            return Polynomial(coef=[sum(x) for x in itertools.izip_longest(a, b, fillvalue=0)],irr_poly=self.irr_poly,mod=self.mod).coeffmod()
-        elif type(x) in (int,long,float):
+            return Polynomial(coef=[sum(x) for x in itertools.zip_longest(a, b, fillvalue=0)],irr_poly=self.irr_poly,mod=self.mod).coeffmod()
+        elif type(x) in (int,int,float):
             if x == 0:
                 return self
 
             a = self.coef
             b = [x]
 
-            return Polynomial(coef=[sum(x) for x in itertools.izip_longest(a, b, fillvalue=0)],irr_poly=self.irr_poly,mod=self.mod).coeffmod()
+            return Polynomial(coef=[sum(x) for x in itertools.zip_longest(a, b, fillvalue=0)],irr_poly=self.irr_poly,mod=self.mod).coeffmod()
         else:
             raise Exception("Unknown operation - %s and %s",type(self),type(other))
 
@@ -372,7 +372,7 @@ class Polynomial():
                 return self
             else:
                 b = x.coef
-        elif type(x) in (int,long,float):
+        elif type(x) in (int,int,float):
             if self.is_zero():
                 return Polynomial(coef=[x],irr_poly=self.irr_poly,mod=self.mod).coeffmod()
             elif x == 0:
@@ -384,7 +384,7 @@ class Polynomial():
 
         # Receives another polynomial  a and sum to this one
         a = self.coef
-        return Polynomial(coef=[sum(x) for x in itertools.izip_longest(a, b, fillvalue=0)],irr_poly=self.irr_poly,mod=self.mod).coeffmod()
+        return Polynomial(coef=[sum(x) for x in itertools.zip_longest(a, b, fillvalue=0)],irr_poly=self.irr_poly,mod=self.mod).coeffmod()
 
     def __sub__(self,x):
         # self - x
@@ -395,7 +395,7 @@ class Polynomial():
                 return self
             else:
                 b = [-c for c in x.coef]
-        elif type(x) in (int,long,float):
+        elif type(x) in (int,int,float):
             if self.is_zero():
                 return Polynomial(coef=[-x],irr_poly=self.irr_poly,mod=self.mod).coeffmod()
             elif x == 0:
@@ -406,7 +406,7 @@ class Polynomial():
             raise Exception("Invalid operation for %s and Polynomial" % type)
 
         a = self.coef
-        return Polynomial(coef=[sum(x) for x in itertools.izip_longest(a, b, fillvalue=0)],irr_poly=self.irr_poly,mod=self.mod).coeffmod()
+        return Polynomial(coef=[sum(x) for x in itertools.zip_longest(a, b, fillvalue=0)],irr_poly=self.irr_poly,mod=self.mod).coeffmod()
 
     def __rsub__(self,x):
         # x - self
@@ -417,7 +417,7 @@ class Polynomial():
                 return self
             else:
                 b = x.coef
-        elif type(x) in (int,long,float):
+        elif type(x) in (int,int,float):
             if self.is_zero():
                 return Polynomial(coef=[x],irr_poly=self.irr_poly,mod=self.mod).coeffmod()
             elif x == 0:
@@ -428,7 +428,7 @@ class Polynomial():
             raise Exception("Ops! I don't know how to add this: %s",b)
 
         a = [-c for c in self.coef]
-        return Polynomial(coef=[sum(c) for c in itertools.izip_longest(a, b, fillvalue=0)],irr_poly=self.irr_poly,mod=self.mod).coeffmod()
+        return Polynomial(coef=[sum(c) for c in itertools.zip_longest(a, b, fillvalue=0)],irr_poly=self.irr_poly,mod=self.mod).coeffmod()
 
     # Shift n bits to the least significant bit
     def __rshift__(self,n):
@@ -483,7 +483,7 @@ class Polynomial():
             b = other.copy()
         elif type(other) in (list,tuple):
             b = Polynomial(coef=other)
-        elif type(other) in (int,long,float):
+        elif type(other) in (int,int,float):
             b = Polynomial(coef=[other])
         else:
             return False

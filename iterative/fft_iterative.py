@@ -4,7 +4,7 @@ from cmath import exp, pi
 def bitrev_shuffle(x):
     N = len(x)
     j = 0
-    for i in xrange(1, N):
+    for i in range(1, N):
         b = N >> 1
         while j >= b:
             j -= b
@@ -21,8 +21,8 @@ def fft_in_place(x):
     while trans_size <= N:
         wb = 1+0j
         wb_step = exp(2j * pi / trans_size)
-        for t in xrange(trans_size >> 1):
-            for trans in xrange(N / trans_size):
+        for t in range(trans_size >> 1):
+            for trans in range(N / trans_size):
                 i = trans * trans_size + t
                 j = i + (trans_size >> 1)
                 a = x[i]
@@ -45,8 +45,8 @@ def ifft_in_place(x):
     while trans_size <= N:
         wb = 1+0j
         wb_step = exp(-2j * pi / trans_size)
-        for t in xrange(trans_size >> 1):
-            for trans in xrange(N / trans_size):
+        for t in range(trans_size >> 1):
+            for trans in range(N / trans_size):
                 i = trans * trans_size + t
                 j = i + (trans_size >> 1)
                 a = x[i]
